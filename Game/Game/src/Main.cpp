@@ -1,42 +1,21 @@
-﻿
-//
-// OpenSiv3D v0.4.3 ゲームテンプレート
-//
-
-//
-// macOS では README.md と同じフォルダに
-// include と lib をコピーしてください。
-//
-
-# include "Common.hpp"
-# include "Title.hpp"
-# include "Game.hpp"
+﻿#include "Common.hpp"
+#include "TestStage.hpp"
 
 void Main()
 {
-	// （Esc キーで終了しないようにする場合はコメントを外す）
+	// ESCで終了しない
 	//System::SetTerminationTriggers(UserAction::CloseButtonClicked);
 
-	// タイトルを設定
-	Window::SetTitle(U"ブロックくずし");
+	Window::Resize(1280, 720);
+	Window::SetTitle(U"Lucia");
 
-	// 背景色を設定
-	Scene::SetBackground(ColorF(0.2, 0.8, 0.4));
-
-	// 使用するフォントアセットを登録
-	FontAsset::Register(U"Title", 120, U"example/font/AnnyantRoman/AnnyantRoman.ttf");
-	FontAsset::Register(U"Menu", 30, Typeface::Regular);
-	FontAsset::Register(U"Score", 36, Typeface::Bold);
+	// Load
+	LoadFont();
 
 	// シーンと遷移時の色を設定
 	MyApp manager;
 	manager
-		.add<Title>(State::Title)
-		.add<Game>(State::Game)
-		.setFadeColor(ColorF(1.0));
-
-	// （ゲームシーンから開始する場合はコメントを外す）
-	//manager.init(State::Game);
+		.add<TestStage>(StageState::TestStage);
 
 	while (System::Update())
 	{

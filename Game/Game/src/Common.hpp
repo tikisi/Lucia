@@ -3,19 +3,20 @@
 # include <Siv3D.hpp> // OpenSiv3D v0.4.2
 
 // シーンの名前
-enum class State
+enum class StageState
 {
-	Title,
-
-	Game
+    TestStage
 };
 
 // ゲームデータ
 struct GameData
 {
-	// ハイスコア
-	int32 highScore = 0;
 };
 
 // シーン管理クラス
-using MyApp = SceneManager<State, GameData>;
+using MyApp = SceneManager<StageState, GameData>;
+
+inline void LoadFont() {
+    FontAsset::Register(U"20", 20);
+    FontAsset::Register(U"30", 30);
+}
