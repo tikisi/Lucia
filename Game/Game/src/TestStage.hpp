@@ -8,7 +8,7 @@ class TestStage : public MyApp::Scene {
 private:
     Array<Object*> objects;
     Player player;
-    Camera2D camera;
+    Camera2DTikisi camera;
 
     // ScrollY
     Point start_pos;
@@ -20,6 +20,9 @@ public:
     void update() override;
     void draw() const override;
 
+    void cameraUpdate();
     void generateBlock(const Point& pos);
-    void loadMap(const String& file);
+    void loadStage(const String& file);
+
+    void debugPrint();
 };

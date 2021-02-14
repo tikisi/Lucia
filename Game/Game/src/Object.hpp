@@ -8,8 +8,8 @@ public:
     Float2 pos;
     Float2 size;
 
-    Object(const Float2 & pos, const Float2 &size) : pos(pos), size(size) {}
-    virtual ~Object(){};
+    Object(const Float2& pos, const Float2& size) : pos(pos), size(size) {}
+    virtual ~Object() {};
     virtual void update() = 0;
     virtual void draw() const = 0;
 };
@@ -17,7 +17,7 @@ public:
 
 class Block : public Object {
 public:
-    Block(const Float2& pos, const Float2& size = Float2(72, 72)) : Object(pos, size) {}
+    Block(const Float2& pos, const Float2& size = Float2(BLOCK_SIZE, BLOCK_SIZE)) : Object(pos, size) {}
 
     virtual void update() override {};
     virtual void draw() const override;

@@ -13,6 +13,7 @@ void Player::update() {
             physics.accel.y = 0.5;     // å∏ë¨
         }
         else if (KeyZ.down()) {
+            physics.speed.y = 0.0f;
             physics.accel.y = -15.0f;
         }
         jumpCounter++;
@@ -22,8 +23,20 @@ void Player::update() {
 }
 
 void Player::draw() const {
-    RectF(physics.pos, physics.size)
-        .drawFrame(2.0, Palette::Red);
+    auto rect = RectF(physics.pos, physics.size);
+    TextureAsset(U"Test").resized(rect.size).drawAt(rect.center());
+    //rect.drawFrame(2.0, Palette::White);
+
+    // è’ìÀÇµÇΩï”
+    if (physics.collisionEdges[0])
+        rect.top().draw(3.0, Palette::Red);
+    if (physics.collisionEdges[1])
+        rect.right().draw(3.0, Palette::Red);
+    if (physics.collisionEdges[2])
+        rect.bottom().draw(3.0, Palette::Red);
+    if (physics.collisionEdges[3])
+        rect.left().draw(3.0, Palette::Red);
+
 }
 
 void Player::collision(const Object& obj) {

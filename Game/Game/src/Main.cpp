@@ -1,29 +1,28 @@
 ﻿#include "Common.hpp"
 #include "TestStage.hpp"
 
-void Main()
-{
-	// ESCで終了しない
-	//System::SetTerminationTriggers(UserAction::CloseButtonClicked);
+void Main() {
+    // ESCで終了しない
+    //System::SetTerminationTriggers(UserAction::CloseButtonClicked);
 
-	Window::Resize(1280, 720);
-	Window::SetTitle(U"Lucia");
+    Window::Resize(1280, 720);
+    Window::SetTitle(U"Lucia");
 
-	// Load
-	LoadFont();
+    // Load
+    LoadFont();
+    TextureAsset::Register(U"Test", U"lucia01.png");
 
-	// シーンと遷移時の色を設定
-	MyApp manager;
-	manager
-		.add<TestStage>(StageState::TestStage);
+    // シーンと遷移時の色を設定
+    MyApp manager;
+    manager
+          .add<TestStage>(StageState::TestStage);
 
-	while (System::Update())
-	{
-		if (!manager.update())
-		{
-			break;
-		}
-	}
+    while (System::Update()) {
+        ClearPrint();
+        if (!manager.update()) {
+            break;
+        }
+    }
 }
 
 //
