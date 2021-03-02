@@ -236,6 +236,7 @@
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\PlayerState.cpp" />
     <ClCompile Include="src\TestStage.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +244,7 @@
     <ClInclude Include="src\Object.hpp" />
     <ClInclude Include="src\Physics.hpp" />
     <ClInclude Include="src\Player.hpp" />
+    <ClInclude Include="src\PlayerState.hpp" />
     <ClInclude Include="src\TestStage.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
