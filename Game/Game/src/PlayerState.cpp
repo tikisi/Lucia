@@ -1,5 +1,5 @@
 #include "PlayerState.hpp"
-#include "Common.hpp"
+#include "Player.hpp"
 
 StandState PlayerState::standState;
 WalkState PlayerState::walkState;
@@ -20,7 +20,7 @@ PlayerState* OnGrandState::update(Player& player) {
 	if (KeyZ.down()) {
 		return &PlayerState::jump1State;
 	}
-	if (KeyDown.down()) {
+	if (KeyDown.pressed()) {
 		return &PlayerState::duckState;
 	}
 	if (!player.isGround()) {
@@ -31,82 +31,114 @@ PlayerState* OnGrandState::update(Player& player) {
 }
 
 PlayerState* StandState::update(Player& player) {
+	// ó‘Ô‘JˆÚ
 	PlayerState* state = OnGrandState::update(player);
 
-	changeDir();
-
-	if (state == nullptr) {
-		if ((KeyRight | KeyLeft).down()) {
+	if (state != nullptr) {
+		return state;
+	}
+	else {
+		if ((KeyRight.pressed() ^ KeyLeft.pressed())) {
 			if (KeyShift.pressed())
-				state = &PlayerState::runState;
+				return &PlayerState::runState;
 			else
-				state = &PlayerState::walkState;
+				return &PlayerState::walkState;
 		}
 	}
 
-	return state;
+	// s“®
+	changeDir();
+
+	return nullptr;
+}
+
+void StandState::entry(Player& player) {
+	player.physics.accel = Vec2::Zero();
 }
 
 PlayerState* WalkState::update(Player& player) {
+	// ó‘Ô‘JˆÚ
 	PlayerState* state = OnGrandState::update(player);
 
-	changeDir();
-	player.physics.accel = Float2(1.5f * (KeyRight.pressed() - KeyLeft.pressed()), 0);
-
-	if (state == nullptr) {
+	if (state != nullptr) {
+		return state;
+	}
+	else {
 		if (!(KeyRight.pressed() ^ KeyLeft.pressed())) {
-			state = &PlayerState::standState;
+			return &PlayerState::standState;
 		}
 		else if (KeyShift.pressed()) {
-			state = &PlayerState::runState;
+			return &PlayerState::runState;
 		}
 	}
 
-	return state;
+	// s“®
+	changeDir();
+	player.physics.accel = Float2(1.5f * (KeyRight.pressed() - KeyLeft.pressed()), 0);
+
+	return nullptr;
 }
 
 PlayerState* RunState::update(Player& player) {
+	// ó‘Ô‘JˆÚ
 	PlayerState* state = OnGrandState::update(player);
 
+	if (state != nullptr) {
+		return state;
+	}
+	else {
+		if (!(KeyRight.pressed() ^ KeyLeft.pressed())) {
+			return &PlayerState::standState;
+		}
+		else if (!KeyShift.pressed()) {
+			return &PlayerState::walkState;
+		}
+	}
+
+	// s“®
 	changeDir();
 	player.physics.accel = Float2(2.0f * (KeyRight.pressed() - KeyLeft.pressed()), 0);
 
-	if (state == nullptr) {
-		if (!(KeyRight.pressed() ^ KeyLeft.pressed())) {
-			state = &PlayerState::standState;
-		}
-		else if (!KeyShift.pressed()) {
-			state = &PlayerState::walkState;
-		}
-	}
-
-	return state;
+	return nullptr;
 }
 
 PlayerState* DuckState::update(Player& player) {
+	// ó‘Ô‘JˆÚ
 	PlayerState* state = OnGrandState::update(player);
 
-	changeDir();
-
-	if (state == nullptr) {
+	if (state != nullptr) {
+		return state;
+	}
+	else {
 		if (!KeyDown.pressed()) {
-			state = &PlayerState::standState;
+			return &PlayerState::standState;
 		}
 	}
+
+	// s“®
+	changeDir();
 
 	return state;
 }
 
+void DuckState::entry(Player& player) {
+	player.physics.accel = Vec2::Zero();
+}
+
 PlayerState* Jump1State::update(Player& player) {
-
-	changeDir();
-	player.physics.accel = Float2(1.5f * (KeyRight.pressed() - KeyLeft.pressed()), 0);
-	// Œ¸‘¬
-	if (counter++ < 25 && !KeyZ.pressed())
-		player.physics.accel.y = 0.5;
-
+	// ó‘Ô‘JˆÚ
 	if (player.isGround()) {
-		return &PlayerState::standState;
+		if (KeyLeft.pressed() ^ KeyRight.pressed()) {
+			if ((KeyShift.pressed())) {
+				return &PlayerState::runState;
+			}
+			else {
+				return &PlayerState::walkState;
+			}
+		}
+		else {
+			return &PlayerState::standState;
+		}
 	}
 	if (player.physics.speed.y >= 0) {
 		return &PlayerState::fallState;
@@ -114,6 +146,12 @@ PlayerState* Jump1State::update(Player& player) {
 	if (KeyZ.down()) {
 		return &PlayerState::jump2State;
 	}
+
+	// s“®
+	changeDir();
+	player.physics.accel = Float2(1.5f * (KeyRight.pressed() - KeyLeft.pressed()), 0);
+	if (counter++ < 25 && !KeyZ.pressed())
+		player.physics.accel.y = 0.5;	// Œ¸‘¬
 
 	return nullptr;
 }
@@ -124,15 +162,27 @@ void Jump1State::entry(Player& player) {
 }
 
 PlayerState* Jump2State::update(Player& player) {
-	changeDir();
-	player.physics.accel = Float2(1.5f * (KeyRight.pressed() - KeyLeft.pressed()), 0);
-
+	// ó‘Ô‘JˆÚ
 	if (player.isGround()) {
-		return &PlayerState::standState;
+		if (KeyLeft.pressed() ^ KeyRight.pressed()) {
+			if ((KeyShift.pressed())) {
+				return &PlayerState::runState;
+			}
+			else {
+				return &PlayerState::walkState;
+			}
+		}
+		else {
+			return &PlayerState::standState;
+		}
 	}
 	if (player.physics.speed.y >= 0) {
 		return &PlayerState::fallState;
 	}
+
+	// s“®
+	changeDir();
+	player.physics.accel = Float2(1.5f * (KeyRight.pressed() - KeyLeft.pressed()), 0);
 
 	return nullptr;
 }
@@ -143,13 +193,24 @@ void Jump2State::entry(Player& player) {
 }
 
 PlayerState* FallState::update(Player& player) {
-	changeDir();
-
-	player.physics.accel = Float2(1.5f * (KeyRight.pressed() - KeyLeft.pressed()), 0);
-
+	// ó‘Ô‘JˆÚ
 	if (player.isGround()) {
-		return &PlayerState::fallState;
+		if (KeyLeft.pressed() ^ KeyRight.pressed()) {
+			if ((KeyShift.pressed())) {
+				return &PlayerState::runState;
+			}
+			else {
+				return &PlayerState::walkState;
+			}
+		}
+		else {
+			return &PlayerState::standState;
+		}
 	}
+
+	// s“®
+	changeDir();
+	player.physics.accel = Float2(1.5f * (KeyRight.pressed() - KeyLeft.pressed()), 0);
 
 	return nullptr;
 }

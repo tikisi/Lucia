@@ -1,15 +1,20 @@
 #pragma once
 #include "Common.hpp"
 #include "Physics.hpp"
+#include "PlayerState.hpp"
 
 class Player {
 private:
-    uint32 jumpCounter;
+    PlayerState* state;
+    bool _isGround;
 
 public:
     Physics physics;
 
-    void init() { jumpCounter = 0; }
+    void init() {
+        state = &PlayerState::standState;
+        _isGround = false;
+    }
     Player(const Physics& physics) : physics(physics) { this->init(); }
     Player(const Float2& pos, const Float2& size = Float2((float)BLOCK_SIZE, BLOCK_SIZE * 2)):
         physics(pos, size) {
@@ -23,5 +28,5 @@ public:
     Float2 getPos() const { return physics.pos; }
     Float2 getSize() const { return physics.size; }
     Float2 getCenter() const { return physics.getCenter(); }
-    bool isGround() const { return jumpCounter == 0; }
+    bool isGround() const { return _isGround; }
 };

@@ -1,46 +1,44 @@
 #include "Player.hpp"
 
 void Player::update() {
-    // à⁄ìÆ
-    physics.accel = Float2(1.5f * (KeyRight.pressed() - KeyLeft.pressed()), 0);
+/*	// èÛë‘ëJà⁄Å{à⁄ìÆ
+	PlayerState *n_state = state->update(*this);
+	while (n_state != nullptr) {
+		state = n_state;
+		n_state = state->update(*this);
+	}
+*/
+	PlayerState* n_state = state->update(*this);
+	if (n_state != nullptr) {
+		state = n_state;
+		state->entry(*this);
+	}
 
-    if (jumpCounter == 0 && KeyZ.down()) { jumpCounter = 1; }
-    if (jumpCounter != 0) {
-        if (jumpCounter == 1) {
-            physics.accel.y = -15.0f;  // èâë¨
-        }
-        else if (jumpCounter < 25 && !KeyZ.pressed()) {
-            physics.accel.y = 0.5;     // å∏ë¨
-        }
-        else if (KeyZ.down()) {
-            physics.speed.y = 0.0f;
-            physics.accel.y = -15.0f;
-        }
-        jumpCounter++;
-    }
+	_isGround = false;
+	physics.update();
 
-    physics.update();
+	Print <<  U"State: " + state->getName();
 }
 
 void Player::draw() const {
-    auto rect = RectF(physics.pos, physics.size);
-    TextureAsset(U"Test").resized(rect.size).drawAt(rect.center());
-    //rect.drawFrame(2.0, Palette::White);
+	auto rect = RectF(physics.pos, physics.size);
+	TextureAsset(U"Test").resized(rect.size).drawAt(rect.center());
+	//rect.drawFrame(2.0, Palette::White);
 
-    // è’ìÀÇµÇΩï”
-    if (physics.collisionEdges[0])
-        rect.top().draw(3.0, Palette::Red);
-    if (physics.collisionEdges[1])
-        rect.right().draw(3.0, Palette::Red);
-    if (physics.collisionEdges[2])
-        rect.bottom().draw(3.0, Palette::Red);
-    if (physics.collisionEdges[3])
-        rect.left().draw(3.0, Palette::Red);
+	// è’ìÀÇµÇΩï”
+	if (physics.collisionEdges[0])
+		rect.top().draw(3.0, Palette::Red);
+	if (physics.collisionEdges[1])
+		rect.right().draw(3.0, Palette::Red);
+	if (physics.collisionEdges[2])
+		rect.bottom().draw(3.0, Palette::Red);
+	if (physics.collisionEdges[3])
+		rect.left().draw(3.0, Palette::Red);
 
 }
 
 void Player::collision(const Object& obj) {
-    if (physics.collision(obj) == Physics::Edge::cd) {
-        jumpCounter = 0;
-    }
+	if (physics.collision(obj) == Physics::Edge::cd) {
+		_isGround = true;
+	}
 }

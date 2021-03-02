@@ -1,17 +1,22 @@
 #pragma once
-#include "Player.hpp"
+#include "Common.hpp"
 
 // プレイヤーの向いている方向
 enum class PlayerDir {
 	L, R
 };
 
+class Player;
+
 class StandState; class WalkState; class RunState; class DuckState;
 class Jump1State; class Jump2State; class FallState;
 
 class PlayerState {
 protected:
+	const String name;
+
 	void changeDir();
+
 public:
 	// 各状態
 	static StandState standState;
@@ -25,61 +30,66 @@ public:
 	// 方向
 	inline static PlayerDir dir = PlayerDir::R;
 
-	PlayerState() = default;
+	PlayerState(const String& name = U"default") : name(name) {};
 	virtual ~PlayerState() = default;
-
 	virtual PlayerState* update(Player& player) = 0;
 	virtual void entry(Player& player) {}
+
+	bool operator==(const PlayerState &p) { return this->name == p.name; }
+
+	String getName() const { return this->name; };
 };
 
 class OnGrandState : public PlayerState {
 public:
-	OnGrandState() = default;
+	OnGrandState(const String& name = U"OnGrandState") : PlayerState(name) {};
 	virtual PlayerState* update(Player& player) override;
 };
 
 class StandState : public OnGrandState {
 public:
-	StandState() = default;
+	StandState() : OnGrandState(U"StandState") {};
 	PlayerState* update(Player& player) override;
+	void entry(Player& player) override;
 };
 
 class WalkState : public OnGrandState {
 public:
-	WalkState() = default;
+	WalkState() : OnGrandState(U"WalkState") {}
 	PlayerState* update(Player& player) override;
 };
 
 class RunState : public OnGrandState {
 public:
-	RunState() = default;
+	RunState() : OnGrandState(U"RunState") {}
 	PlayerState* update(Player& player) override;
 };
 
 class DuckState : public OnGrandState {
 public:
-	DuckState() = default;
+	DuckState() : OnGrandState(U"DuckState") {}
 	PlayerState* update(Player& player) override;
+	void entry(Player& player) override;
 };
 
 class Jump1State : public PlayerState {
 private:
 	uint32 counter;
 public:
-	Jump1State() = default;
+	Jump1State() : PlayerState(U"Jump1State") {}
 	PlayerState* update(Player& player) override;
 	void entry(Player& player) override;
 };
 
 class Jump2State : public PlayerState {
 public:
-	Jump2State() = default;
+	Jump2State() : PlayerState(U"Jump2State") {}
 	PlayerState* update(Player& player) override;
 	void entry(Player& player) override;
 };
 
 class FallState : public PlayerState {
 public:
-	FallState() = default;
+	FallState() : PlayerState(U"FallState") {}
 	PlayerState* update(Player& player) override;
 };
