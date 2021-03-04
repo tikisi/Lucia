@@ -1,29 +1,47 @@
 #include "Player.hpp"
 
-void Player::update() {
-/*	// ó‘Ô‘JˆÚ{ˆÚ“®
-	PlayerState *n_state = state->update(*this);
-	while (n_state != nullptr) {
-		state = n_state;
-		n_state = state->update(*this);
+
+void Player::init() {
+	state = &PlayerState::standState;
+	_isGround = false;
+
+	// 	Texture•ªŠ„
+	const Texture texture(U"UnityChan.png");
+	const Size size(64, 64);
+	const Array<uint32> num{ 5, 4, 4, 7 };
+
+	textures.resize(num.size());
+
+	for (uint32 i = 0; i < num.size(); i++) {
+		for (uint32 j = 0; j < num[i]; j++) {
+			textures[i].push_back(texture(Size(j * size.x, i * size.y), size));
+		}
 	}
-*/
+}
+
+void Player::update() {
 	PlayerState* n_state = state->update(*this);
 	if (n_state != nullptr) {
 		state = n_state;
 		state->entry(*this);
+		state->update(*this);
 	}
 
-	_isGround = false;
 	physics.update();
 
-	Print <<  U"State: " + state->getName();
+	// ƒtƒ‰ƒO‚ğ‰º‚°‚é
+	_isGround = false;
+
+	Print << U"State: " << state->getName();
+	Print << U"Speed: " << physics.speed;
+	Print << U"Accel: " << physics.accel;
 }
 
 void Player::draw() const {
 	auto rect = RectF(physics.pos, physics.size);
-	TextureAsset(U"Test").resized(rect.size).drawAt(rect.center());
-	//rect.drawFrame(2.0, Palette::White);
+	//TextureAsset(U"Test").resized(rect.size).drawAt(rect.center());
+	textures[Min(static_cast<int>(state->getType()), 3)][state->getIndex()].drawAt(rect.center());
+	rect.drawFrame(2.0, Palette::White);
 
 	// Õ“Ë‚µ‚½•Ó
 	if (physics.collisionEdges[0])
@@ -34,7 +52,6 @@ void Player::draw() const {
 		rect.bottom().draw(3.0, Palette::Red);
 	if (physics.collisionEdges[3])
 		rect.left().draw(3.0, Palette::Red);
-
 }
 
 void Player::collision(const Object& obj) {

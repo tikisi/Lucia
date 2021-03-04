@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <Siv3D.hpp> // OpenSiv3D v0.4.2
 
+#define UNUSED_VAR(x) ((void)(&x))
+
 constexpr int BLOCK_SIZE = 72;
 
 // シーンの名前

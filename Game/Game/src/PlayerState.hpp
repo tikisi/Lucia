@@ -6,18 +6,34 @@ enum class PlayerDir {
 	L, R
 };
 
-class Player;
+enum class PlayerStateType : uint32 {
+	STAND,
+	WALK,
+	RUN,
+	DUCK,
+	JUMP1,
+	JUMP2,
+	FALL,
+	ONGRAND,
+	DEFAULT
+};
 
+class Player;
 class StandState; class WalkState; class RunState; class DuckState;
-class Jump1State; class Jump2State; class FallState;
+class Jump1State; class Jump2State; class FallState; class OnGrandState;
 
 class PlayerState {
 protected:
-	const String name;
-
+	const PlayerStateType type;
 	void changeDir();
 
 public:
+	// •ûŒü
+	inline static PlayerDir dir = PlayerDir::R;
+
+	// enum to string
+	static const HashTable<PlayerStateType, String> toString;
+
 	// Šeó‘Ô
 	static StandState standState;
 	static WalkState walkState;
@@ -27,47 +43,52 @@ public:
 	static Jump2State jump2State;
 	static FallState fallState;
 
-	// •ûŒü
-	inline static PlayerDir dir = PlayerDir::R;
-
-	PlayerState(const String& name = U"default") : name(name) {};
+	PlayerState(const PlayerStateType type = PlayerStateType::DEFAULT) : type(type) {};
 	virtual ~PlayerState() = default;
+	bool operator==(const PlayerState& p) { return this->type == p.type; }
+
+	// override
 	virtual PlayerState* update(Player& player) = 0;
-	virtual void entry(Player& player) {}
+	virtual void entry(Player& player) { UNUSED_VAR(player); }
+	virtual uint32 getIndex() const { return 0; };
 
-	bool operator==(const PlayerState &p) { return this->name == p.name; }
-
-	String getName() const { return this->name; };
+	// utility
+	PlayerStateType getType() const { return this->type; }
+	String getName() const { return toString.at(this->type); }
 };
 
 class OnGrandState : public PlayerState {
 public:
-	OnGrandState(const String& name = U"OnGrandState") : PlayerState(name) {};
+	OnGrandState(const PlayerStateType type = PlayerStateType::ONGRAND) : PlayerState(type) {};
 	virtual PlayerState* update(Player& player) override;
 };
 
 class StandState : public OnGrandState {
+private:
+	uint32 counter;
+
 public:
-	StandState() : OnGrandState(U"StandState") {};
+	StandState() : OnGrandState(PlayerStateType::STAND) {};
 	PlayerState* update(Player& player) override;
 	void entry(Player& player) override;
+	uint32 getIndex() const override;
 };
 
 class WalkState : public OnGrandState {
 public:
-	WalkState() : OnGrandState(U"WalkState") {}
+	WalkState() : OnGrandState(PlayerStateType::WALK) {}
 	PlayerState* update(Player& player) override;
 };
 
 class RunState : public OnGrandState {
 public:
-	RunState() : OnGrandState(U"RunState") {}
+	RunState() : OnGrandState(PlayerStateType::RUN) {}
 	PlayerState* update(Player& player) override;
 };
 
 class DuckState : public OnGrandState {
 public:
-	DuckState() : OnGrandState(U"DuckState") {}
+	DuckState() : OnGrandState(PlayerStateType::DUCK) {}
 	PlayerState* update(Player& player) override;
 	void entry(Player& player) override;
 };
@@ -76,20 +97,20 @@ class Jump1State : public PlayerState {
 private:
 	uint32 counter;
 public:
-	Jump1State() : PlayerState(U"Jump1State") {}
+	Jump1State() : PlayerState(PlayerStateType::JUMP1) {}
 	PlayerState* update(Player& player) override;
 	void entry(Player& player) override;
 };
 
 class Jump2State : public PlayerState {
 public:
-	Jump2State() : PlayerState(U"Jump2State") {}
+	Jump2State() : PlayerState(PlayerStateType::JUMP2) {}
 	PlayerState* update(Player& player) override;
 	void entry(Player& player) override;
 };
 
 class FallState : public PlayerState {
 public:
-	FallState() : PlayerState(U"FallState") {}
+	FallState() : PlayerState(PlayerStateType::FALL) {}
 	PlayerState* update(Player& player) override;
 };

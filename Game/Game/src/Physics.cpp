@@ -7,6 +7,7 @@ void Physics::update() {
     this->t_speed = speed;
 
     // ‰Šú‰»
+    this->accel = Vec2::Zero();
     std::fill(collisionEdges, collisionEdges + 4, false);
 }
 

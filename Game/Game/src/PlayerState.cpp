@@ -9,6 +9,18 @@ Jump1State PlayerState::jump1State;
 Jump2State PlayerState::jump2State;
 FallState PlayerState::fallState;
 
+const HashTable<PlayerStateType, String> PlayerState::toString = {
+	{PlayerStateType::STAND, U"STAND"},
+	{PlayerStateType::WALK, U"WALK"},
+	{PlayerStateType::RUN, U"RUN"},
+	{PlayerStateType::DUCK, U"DUCK"},
+	{PlayerStateType::JUMP1, U"JUMP1"},
+	{PlayerStateType::JUMP2, U"JUMP2"},
+	{PlayerStateType::FALL, U"FALL"},
+	{PlayerStateType::ONGRAND, U"ONGRAND"},
+	{PlayerStateType::DEFAULT, U"DEFAULT"},
+};
+
 void PlayerState::changeDir() {
 	if (KeyRight.pressed() && !KeyLeft.pressed())
 		dir = PlayerDir::R;
@@ -17,6 +29,8 @@ void PlayerState::changeDir() {
 }
 
 PlayerState* OnGrandState::update(Player& player) {
+	UNUSED_VAR(player);
+
 	if (KeyZ.down()) {
 		return &PlayerState::jump1State;
 	}
@@ -49,11 +63,21 @@ PlayerState* StandState::update(Player& player) {
 	// s“®
 	changeDir();
 
+	// Index
+	if (++counter >= 60) {
+		counter = 0;
+	}
+
 	return nullptr;
 }
 
 void StandState::entry(Player& player) {
 	player.physics.accel = Vec2::Zero();
+	counter = 0;
+}
+
+uint32 StandState::getIndex() const {
+	return counter / 20;
 }
 
 PlayerState* WalkState::update(Player& player) {
