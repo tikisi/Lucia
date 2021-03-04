@@ -24,7 +24,7 @@ const HashTable<PlayerStateType, String> PlayerState::toString = {
 void PlayerState::changeDir() {
 	if (KeyRight.pressed() && !KeyLeft.pressed())
 		dir = PlayerDir::R;
-	if (KeyRight.pressed() && !KeyLeft.pressed())
+	if (!KeyRight.pressed() && KeyLeft.pressed())
 		dir = PlayerDir::L;
 }
 
@@ -76,9 +76,7 @@ void StandState::entry(Player& player) {
 	counter = 0;
 }
 
-uint32 StandState::getIndex() const {
-	return counter / 20;
-}
+uint32 StandState::getIndex() const { return counter / 20; }
 
 PlayerState* WalkState::update(Player& player) {
 	// ó‘Ô‘JˆÚ
@@ -100,8 +98,17 @@ PlayerState* WalkState::update(Player& player) {
 	changeDir();
 	player.physics.accel = Float2(1.5f * (KeyRight.pressed() - KeyLeft.pressed()), 0);
 
+	// Index
+	if (++counter >= 32) {
+		counter = 0;
+	}
+
 	return nullptr;
 }
+
+void WalkState::entry(Player& player) { counter = 0; }
+
+uint32 WalkState::getIndex() const { return counter / 8; }
 
 PlayerState* RunState::update(Player& player) {
 	// ó‘Ô‘JˆÚ
@@ -123,8 +130,17 @@ PlayerState* RunState::update(Player& player) {
 	changeDir();
 	player.physics.accel = Float2(2.0f * (KeyRight.pressed() - KeyLeft.pressed()), 0);
 
+	// Index
+	if (++counter >= 32) {
+		counter = 0;
+	}
+
 	return nullptr;
 }
+
+void RunState::entry(Player& player) { counter = 0; }
+
+uint32 RunState::getIndex() const { return counter / 8; }
 
 PlayerState* DuckState::update(Player& player) {
 	// ó‘Ô‘JˆÚ
@@ -177,12 +193,19 @@ PlayerState* Jump1State::update(Player& player) {
 	if (counter++ < 25 && !KeyZ.pressed())
 		player.physics.accel.y = 0.5;	// Œ¸‘¬
 
+	// Index
+	counter++;
+
 	return nullptr;
 }
 
 void Jump1State::entry(Player& player) {
 	counter = 0;
 	player.physics.accel.y = -15.0;
+}
+
+uint32 Jump1State::getIndex() const {
+	return counter / 12;
 }
 
 PlayerState* Jump2State::update(Player& player) {
@@ -207,7 +230,7 @@ PlayerState* Jump2State::update(Player& player) {
 	// s“®
 	changeDir();
 	player.physics.accel = Float2(1.5f * (KeyRight.pressed() - KeyLeft.pressed()), 0);
-
+	
 	return nullptr;
 }
 

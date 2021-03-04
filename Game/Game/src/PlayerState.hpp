@@ -75,15 +75,25 @@ public:
 };
 
 class WalkState : public OnGrandState {
+private:
+	uint32 counter;
+
 public:
 	WalkState() : OnGrandState(PlayerStateType::WALK) {}
 	PlayerState* update(Player& player) override;
+	void entry(Player& player) override;
+	uint32 getIndex() const override;
 };
 
 class RunState : public OnGrandState {
+private:
+	uint32 counter;
+
 public:
 	RunState() : OnGrandState(PlayerStateType::RUN) {}
 	PlayerState* update(Player& player) override;
+	void entry(Player& player) override;
+	uint32 getIndex() const override;
 };
 
 class DuckState : public OnGrandState {
@@ -100,6 +110,7 @@ public:
 	Jump1State() : PlayerState(PlayerStateType::JUMP1) {}
 	PlayerState* update(Player& player) override;
 	void entry(Player& player) override;
+	uint32 getIndex() const override;
 };
 
 class Jump2State : public PlayerState {

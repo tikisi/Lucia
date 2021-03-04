@@ -39,8 +39,11 @@ void Player::update() {
 
 void Player::draw() const {
 	auto rect = RectF(physics.pos, physics.size);
-	//TextureAsset(U"Test").resized(rect.size).drawAt(rect.center());
-	textures[Min(static_cast<int>(state->getType()), 3)][state->getIndex()].drawAt(rect.center());
+	if (state->dir == PlayerDir::R)
+		textures[Min(static_cast<int>(state->getType()), 3)][state->getIndex()].drawAt(rect.center());
+	else
+		textures[Min(static_cast<int>(state->getType()), 3)][state->getIndex()].mirrored().drawAt(rect.center());
+
 	rect.drawFrame(2.0, Palette::White);
 
 	// è’ìÀÇµÇΩï”
