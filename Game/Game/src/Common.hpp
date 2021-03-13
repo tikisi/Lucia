@@ -10,6 +10,11 @@ enum class StageState {
     TestStage
 };
 
+// 方向
+enum class DIR {
+    L, C, R
+};
+
 // ゲームデータ
 struct GameData {
 };
@@ -21,6 +26,7 @@ inline void LoadFont() {
     FontAsset::Register(U"20", 20);
     FontAsset::Register(U"30", 30);
 }
+
 
 class Camera2DTikisi : public Camera2D {
 public:

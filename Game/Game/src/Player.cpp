@@ -3,6 +3,7 @@
 
 void Player::init() {
 	state = &PlayerState::standState;
+	knockBackFlag = false;
 	_isGround = false;
 
 	// 	Texture•ªŠ„
@@ -32,6 +33,11 @@ void Player::update() {
 	// ƒtƒ‰ƒO‚ð‰º‚°‚é
 	_isGround = false;
 
+
+	if (KeyS.down()) {
+		this->knockBackFlag = true;
+		this->knockBackDir = DIR::L;
+	}
 	Print << U"State: " << state->getName();
 	Print << U"Speed: " << physics.speed;
 	Print << U"Accel: " << physics.accel;
