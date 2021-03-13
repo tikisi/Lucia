@@ -32,7 +32,7 @@ void PlayerState::changeDir() {
 
 PlayerState* PlayerState::update(Player& player) {
     UNUSED_VAR(player);
-    if (player.isKnockBack()) {
+    if (player.getKnockBackCounter() == 1) {
         return &knockBackState;
     }
 
@@ -294,19 +294,16 @@ PlayerState* FallState::update(Player& player) {
 
 void KnockBackState::entry(Player& player) {
     if (player.getKnockBackDir() == DIR::R)
-        player.physics.accel = Float2(15.0f, -7.0);
+        player.physics.accel = Float2(20.0f, -8.0);
     else
-        player.physics.accel = Float2(-15.0f, -7.0);
+        player.physics.accel = Float2(-20.0f, -8.0);
 
     counter = 0;
 }
 
 PlayerState* KnockBackState::update(Player& player) {
     // –³“Gó‘Ô‚ªI—¹‚µ‚½‚ç
-    if (counter++ > 20) {
-        // ƒtƒ‰ƒO‚ð‰º‚°‚é
-        player.downKnockBackFlag();
-
+    if (counter++ > 50) {
         if (player.isGround()) {
             if (KeyLeft.pressed() ^ KeyRight.pressed()) {
                 if ((KeyShift.pressed())) {
@@ -325,11 +322,13 @@ PlayerState* KnockBackState::update(Player& player) {
         }
     }
 
-    if (player.getKnockBackDir() == DIR::R) {
-        player.physics.accel.x = 1.5f;
-    }
-    else if (player.getKnockBackDir() == DIR::L) {
-        player.physics.accel.x = -1.5f;
+    if (counter < 30) {
+        if (player.getKnockBackDir() == DIR::R) {
+            player.physics.accel.x = 1.5f;
+        }
+        else if (player.getKnockBackDir() == DIR::L) {
+            player.physics.accel.x = -1.5f;
+        }
     }
 
     return nullptr;

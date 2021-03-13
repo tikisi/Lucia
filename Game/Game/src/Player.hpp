@@ -9,7 +9,7 @@ private:
     bool _isGround;
 
     // KnockBack
-    bool knockBackFlag;
+    uint32 knockBackCounter;
     DIR knockBackDir;
 
 public:
@@ -28,13 +28,13 @@ public:
     void draw() const;
 
     void collision(const Object& obj);
+    const TextureRegion& selectTexture() const;
     Float2 getPos() const { return physics.pos; }
     Float2 getSize() const { return physics.size; }
     Float2 getCenter() const { return physics.getCenter(); }
     bool isGround() const { return _isGround; }
 
     // KnockBack
-    bool isKnockBack() const {return knockBackFlag;}
-    void downKnockBackFlag() {knockBackFlag = false;}
+    uint32 getKnockBackCounter() const { return knockBackCounter; }
     DIR getKnockBackDir() const { return knockBackDir; }
 };
