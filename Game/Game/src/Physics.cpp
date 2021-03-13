@@ -14,6 +14,7 @@ void Physics::update() {
 Physics::Edge Physics::collision(const Object& obj) {
     // ’è”
     static constexpr float fix_y = 0.1f;    // –„‚ß‚½‚Ü‚Ü‚É‚·‚é—Ê
+    static constexpr float sv = 0.40f;      // •ûŒü‚Ì”»’fŠî€’l
 
     // ’†SÀ•W
     Float2 centerA = Float2(pos.x + (size.x / 2.0f), pos.y + (size.y / 2.0f));
@@ -36,8 +37,8 @@ Physics::Edge Physics::collision(const Object& obj) {
 
         // 8•ûŒü‚©‚ç
         // –k“Œ
-        if (t_speed.x > 0.01f && t_speed.y < -0.01f) {
-            if ((b - d).cross(centerB - d) < 0) {
+        if (t_speed.x > sv && t_speed.y < -sv) {
+            if ((b - d).cross(centerA - d) < 0) {
                 speed.x = 0.0f;
                 pos.x = a.x - size.x;
                 edge = Edge::bc;
@@ -48,9 +49,9 @@ Physics::Edge Physics::collision(const Object& obj) {
                 edge = Edge::ab;
             }
         }
-        else if (t_speed.x < -0.01f && t_speed.y > 0.01f) {
+        else if (t_speed.x < -sv && t_speed.y > sv) {
             // “ì¼
-            if ((b - d).cross(centerB - d) < 0) {
+            if ((b - d).cross(centerA - d) < 0) {
                 speed.y = 0.0f;
                 pos.y = a.y - size.y + fix_y;
                 edge = Edge::cd;
@@ -61,9 +62,9 @@ Physics::Edge Physics::collision(const Object& obj) {
                 edge = Edge::da;
             }
         }
-        else if (t_speed.x < -0.01f && t_speed.y < -0.01f) {
+        else if (t_speed.x < -sv && t_speed.y < -sv) {
             // –k¼
-            if ((a - c).cross(centerB - c) < 0) {
+            if ((a - c).cross(centerA - c) < 0) {
                 speed.y = 0;
                 pos.y = c.y;
                 edge = Edge::ab;
@@ -74,9 +75,9 @@ Physics::Edge Physics::collision(const Object& obj) {
                 edge = Edge::da;
             }
         }
-        else if (t_speed.x > 0.01f && t_speed.y > 0.01f) {
+        else if (t_speed.x > sv && t_speed.y > sv) {
             // “ì“Œ
-            if ((a - c).cross(centerB - c) < 0) {
+            if ((a - c).cross(centerA - c) < 0) {
                 speed.x = 0;
                 pos.x = a.x - size.x;
                 edge = Edge::bc;
@@ -87,25 +88,25 @@ Physics::Edge Physics::collision(const Object& obj) {
                 edge = Edge::cd;
             }
         }
-        else if (t_speed.x > 0.01f && abs(t_speed.y) <= 0.01f) {
+        else if (t_speed.x > sv && abs(t_speed.y) <= sv) {
             // ¨
             speed.x = 0.0f;
             pos.x = obj.pos.x - size.x;
             edge = Edge::bc;
         }
-        else if (t_speed.x < -0.01f && abs(t_speed.y) <= 0.01f) {
+        else if (t_speed.x < -sv && abs(t_speed.y) <= sv) {
             // ©
             speed.x = 0.0f;
             pos.x = obj.pos.x + obj.size.x;
             edge = Edge::da;
         }
-        else if (abs(t_speed.x) <= 0.01f && t_speed.y > 0.01f) {
+        else if (abs(t_speed.x) <= sv && t_speed.y > sv) {
             // «
             speed.y = 0.0f;
             pos.y = obj.pos.y - size.y + fix_y;
             edge = Edge::cd;
         }
-        else if (abs(t_speed.x) <= 0.01f && t_speed.y < -0.01f) {
+        else if (abs(t_speed.x) <= sv && t_speed.y < -sv) {
             // ª
             speed.y = 0.0f;
             pos.y = obj.pos.y + obj.size.y;

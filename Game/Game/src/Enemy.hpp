@@ -17,7 +17,7 @@ public:
 class NormalZombie : public Enemy {
 public:
     NormalZombie(const Physics& physics) : Enemy(physics) {}
-    NormalZombie(const Float2& pos, const Float2& size = Float2(BLOCK_SIZE, BLOCK_SIZE * 2)) : Enemy(Physics(pos, size)) {}
+    NormalZombie(const Float2& pos, const Float2& size = Float2(BLOCK_SIZE, BLOCK_SIZE)) : Enemy(Physics(pos, size)) {}
 
     void update() override;
     void draw() const override;
