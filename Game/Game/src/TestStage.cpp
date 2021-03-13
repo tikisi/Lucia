@@ -19,10 +19,15 @@ TestStage::~TestStage() {
 void TestStage::update() {
     // Update
     objects.each([](const auto& it) {it->update(); });
+    enemies.each([](const auto& it) {it->update(); });
     player.update();
 
+
     // Collision
-    objects.each([&](const auto& it) {player.collision(*it); });
+    objects.each([&](const auto& it) {
+        enemies.each([&](const auto& e) {e->collisionToObj(*it); });
+        player.collision(*it);
+        });
 
     cameraUpdate();
     // •ÏŠ·Œã‚ÌÀ•W‚Å‚Ìˆ— 
@@ -30,6 +35,9 @@ void TestStage::update() {
         const auto t = camera.createTransformer();
         if (MouseL.down()) {
             generateBlock(Cursor::Pos());
+        }
+        if (MouseR.down()) {
+            enemies.push_back(new NormalZombie(Cursor::Pos()));
         }
     }
 
@@ -42,6 +50,7 @@ void TestStage::draw() const {
         const auto t = camera.createTransformer();
 
         objects.each([](const auto& it) {it->draw(); });
+        enemies.each([](const auto& it) {it->draw(); });
         player.draw();
     }
 

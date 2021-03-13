@@ -232,6 +232,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Enemy.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Physics.cpp" />
@@ -241,6 +242,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.hpp" />
+    <ClInclude Include="src\Enemy.hpp" />
     <ClInclude Include="src\Object.hpp" />
     <ClInclude Include="src\Physics.hpp" />
     <ClInclude Include="src\Player.hpp" />
