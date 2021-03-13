@@ -15,7 +15,7 @@ void Main() {
     // シーンと遷移時の色を設定
     MyApp manager;
     manager
-          .add<TestStage>(StageState::TestStage);
+        .add<TestStage>(StageState::TestStage);
 
     while (System::Update()) {
         ClearPrint();

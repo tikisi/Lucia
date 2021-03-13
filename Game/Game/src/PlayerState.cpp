@@ -121,7 +121,7 @@ PlayerState* WalkState::update(Player& player) {
     return nullptr;
 }
 
-void WalkState::entry(Player& player) { counter = 0; }
+void WalkState::entry(Player& player) { UNUSED_VAR(player); counter = 0; }
 
 uint32 WalkState::getIndex() const { return counter / 8; }
 
@@ -153,7 +153,7 @@ PlayerState* RunState::update(Player& player) {
     return nullptr;
 }
 
-void RunState::entry(Player& player) { counter = 0; }
+void RunState::entry(Player& player) { UNUSED_VAR(player); counter = 0; }
 
 uint32 RunState::getIndex() const { return counter / 8; }
 

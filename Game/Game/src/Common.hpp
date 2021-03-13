@@ -30,8 +30,9 @@ inline void LoadFont() {
 
 class Camera2DTikisi : public Camera2D {
 public:
-    Camera2DTikisi(const Vec2& center, double scale = 1.0, const Camera2DParameters& setting = Camera2DParameters::Default()) 
-        noexcept : Camera2D(center, scale, setting) {} ;
+    Camera2DTikisi(const Vec2& center, double scale = 1.0, const Camera2DParameters& setting = Camera2DParameters::Default())
+        noexcept : Camera2D(center, scale, setting) {
+    };
 
     Vec2 getTargetCenter() const { return this->m_targetCenter; }
 };

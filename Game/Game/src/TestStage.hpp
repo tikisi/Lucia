@@ -8,7 +8,7 @@
 class TestStage : public MyApp::Scene {
 private:
     Array<Object*> objects;
-    Array<Enemy *> enemies;
+    Array<Enemy*> enemies;
     Player player;
     Camera2DTikisi camera;
 
