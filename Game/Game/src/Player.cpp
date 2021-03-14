@@ -1,10 +1,12 @@
 #include "Player.hpp"
+#include "Enemy.hpp"
 
 
 void Player::init() {
     state = &PlayerState::standState;
     knockBackCounter = 0;
     _isGround = false;
+    hp = 20;
 
     // 	Texture•ªŠ„
     const Texture texture(U"UnityChan.png");
@@ -47,6 +49,7 @@ void Player::update() {
     Print << U"State: " << state->getName();
     Print << U"Speed: " << physics.speed;
     Print << U"Accel: " << physics.accel;
+    Print << U"HP:    " << hp;
 }
 
 void Player::draw() const {
@@ -75,6 +78,28 @@ void Player::draw() const {
 void Player::collision(const Object& obj) {
     if (physics.collision(obj) == Physics::Edge::cd) {
         _isGround = true;
+    }
+}
+
+void Player::collision(const Enemy& enemy) {
+    // –³“Gó‘Ô‚Å‚È‚¢‚Æ‚«
+    if (knockBackCounter == 0) {
+        if (physics.collision(enemy.physics)) {
+            hp -= enemy.getDamage();
+
+            // ƒmƒbƒNƒoƒbƒNˆ—
+            knockBackCounter = 1;
+            // “G‚ªŽ~‚Ü‚Á‚Ä‚¢‚é‚Æ‚«
+            if (Abs(enemy.physics.speed.x) <= 0.1f) {
+                if (physics.speed.x < 0.0f) knockBackDir = DIR::R;
+                else knockBackDir = DIR::L;
+            }
+            // “G‚ª“®‚¢‚Ä‚¢‚é‚Æ‚«
+            else {
+                if (enemy.physics.speed.x <= 0.1f) knockBackDir = DIR::L;
+                else knockBackDir = DIR::R;
+            }
+        }
     }
 }
 

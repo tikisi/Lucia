@@ -26,5 +26,6 @@ public:
     void update();
 
     Physics::Edge collision(const Object& obj);
+    bool collision(const Physics& phy);
     Float2 getCenter() const { return pos + size / 2.0; }
 };

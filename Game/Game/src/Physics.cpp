@@ -120,3 +120,20 @@ Physics::Edge Physics::collision(const Object& obj) {
 
     return Edge::none;
 }
+
+bool Physics::collision(const Physics& phy) {
+    // ’†SÀ•W
+    Float2 center1 = Float2(pos.x + (size.x / 2.0f), pos.y + (size.y / 2.0f));
+    Float2 center2 = Float2(phy.pos.x + (phy.size.x / 2.0f), phy.pos.y + (phy.size.y / 2.0f));
+
+    float dx = abs(center1.x - center2.x);
+    float dy = abs(center1.y - center2.y);
+
+    if ((phy.size.x + size.x) / 2.0f > dx &&
+        (phy.size.y + size.y) / 2.0f > dy) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}

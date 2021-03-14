@@ -1,6 +1,6 @@
 #include "Enemy.hpp"
 
-void Enemy::collisionToObj(Object& obj) {
+void Enemy::collision(Object& obj) {
     physics.collision(obj);
 }
 

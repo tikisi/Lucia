@@ -25,9 +25,12 @@ void TestStage::update() {
 
     // Collision
     objects.each([&](const auto& it) {
-        enemies.each([&](const auto& e) {e->collisionToObj(*it); });
+        enemies.each([&](const auto& e) {e->collision(*it); });
         player.collision(*it);
-        });
+        }
+    );
+
+    enemies.each([&](const auto& e) {player.collision(*e); });
 
     cameraUpdate();
     // •ÏŠ·Œã‚ÌÀ•W‚Å‚Ìˆ— 

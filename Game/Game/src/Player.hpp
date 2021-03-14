@@ -3,6 +3,8 @@
 #include "Physics.hpp"
 #include "PlayerState.hpp"
 
+class Enemy;
+
 class Player {
 private:
     PlayerState* state;
@@ -11,6 +13,9 @@ private:
     // KnockBack
     uint32 knockBackCounter;
     DIR knockBackDir;
+
+    // HP
+    int hp;
 
 public:
     Physics physics;
@@ -27,7 +32,10 @@ public:
     void update();
     void draw() const;
 
+    // “–‚½‚è”»’è
     void collision(const Object& obj);
+    void collision(const Enemy& enemy);
+
     const TextureRegion& selectTexture() const;
     Float2 getPos() const { return physics.pos; }
     Float2 getSize() const { return physics.size; }
